@@ -9,17 +9,31 @@ using std::endl;
 #include"myset.h"
 
 namespace csce240h_exam3 {
-template<class T>
-MySet<T>::MySet(T * array, int num_elements) {}
 
 template<class T>
-MySet<T>::MySet(const MySet<T>& tocopy) {}
+MySet<T>::MySet(T * array, int num_elements) {
+  SetElements(array, num_elements);
+}
 
 template<class T>
-MySet<T>::~MySet() {}
+MySet<T>::MySet(const MySet<T>& tocopy) {
+  SetElements(tocopy.array_, tocopy.num_elements_);
+}
 
 template<class T>
-void MySet<T>::SetElements(T * array, int num_elements) const {}
+MySet<T>::~MySet() {
+  delete [] array_;
+}
+
+template<class T>
+void MySet<T>::SetElements(T * array, int num_elements) const {
+  if (array_ != nullptr)
+    delete [] array_;
+  num_elements_ = num_elements;
+  array_ = new T[num_elements_];
+  for (int i = 0; i < num_elements_; i++)
+    array_[i] = array[i];
+}
 
 template<class T>
 void MySet<T>::Print() const {}
