@@ -1,4 +1,4 @@
-// Copyright 2025 Jake Sheror and Abby Holdcraft
+// Copyright 2025 Jake Sherer and Abby Holdcraft
 #ifndef MYSET_H_
 #define MYSET_H_
 
@@ -16,7 +16,7 @@ class MySet : public SetInterface<T> {
 
  public:
   // VIRTUAL FUNCTIONS
-  void Print() const override { std::cout << *this << std::endl; }
+  void Print() const override;
   bool IsElementOf(T value) const override; 
   int Cardinality() const override; 
   bool AddElement(const T&) override; 
@@ -31,9 +31,10 @@ class MySet : public SetInterface<T> {
   ~MySet();
   void SetElements(T * array = nullptr, int num_elements = 0) const;
   void SortAscending();
-  void SortDesnending();
+  void SortDescending();
   void RemoveDuplicates();
   MySet<T>& Concat(const SetInterface<T>& set2, bool includeDuplicates = true);  // Return *this at end
+  void GetElement(int index, T& output) const;
   MySet<T>& operator = (const MySet<T>& tocopy);
   // MySet<T>& operator + (const MySet<T>& toadd);
   MySet<T>& operator += (const MySet<T>& toadd) { return Concat(toadd); }

@@ -1,4 +1,4 @@
-// Copyright 2025 Jake Sheror and Abby Holdcraft
+// Copyright 2025 Jake Sherer and Abby Holdcraft
 #include"setinterface.h"
 #include<iostream>
 using std::ostream;
@@ -35,20 +35,70 @@ void MySet<T>::SetElements(T * array, int num_elements) const {
     array_[i] = array[i];
 }
 
+// Print the set in {1 2 ...} format
 template<class T>
-void MySet<T>::Print() const {}
+void MySet<T>::Print() const {
+  cout << "{";
+  for (int i=0; i < num_elements_; ++i) {
+    cout << array_[i] << " ";
+  }
+  cout << "}" << endl;
+}
 
+// Return true if value is in set
 template<class T>
-bool MySet<T>::IsElementOf(T value) const {} 
+bool MySet<T>::IsElementOf(T value) const {
+  for (int i = 0; i < num_elements_; ++i) {
+    if (array_[i] == value)
+      return true;
+  }
+  return false;
+} 
 
 template<class T>
 int MySet<T>::Cardinality() const {} 
 
+// Add value to the set if it is not present already
 template<class T>
-bool MySet<T>::AddElement(const T&) {} 
+bool MySet<T>::AddElement(const T& toadd) {
+  // Check if it exists
+  if (IsElementOf(toadd))
+    return false;
+  
+  // Create new array and add element to end
+  T* temp = new T[num_elements_ + 1];
+  for (int i = 0; i <num_elements_; ++i)
+    temp[i] = array_[i];
+  temp[num_elements_] = toadd;
 
+  // Free memory
+  delete[] array_;
+  array_ = temp;
+  ++num_elements_;
+  return true;
+}
+
+// Remove value from set if it exists
 template<class T>
-bool MySet<T>::RemoveElement(const T&) {} 
+bool MySet<T>::RemoveElement(const T& toremove) {
+  // Check if it exists
+  if (!IsElementOf(toremove))
+    return false;
+
+  // Create new array and copy over elements while skipping toremove
+  T* temp = new T[num_elements_ - 1];
+  int index = 0;
+  for (int i = 0; i < num_elements_; ++i) {
+    if (array_[i] != toremove)
+      temp[index++] = array_[i];
+  }
+
+  // Free memory
+  delete[] array_;
+  array_ = temp;
+  --num_elements_;
+  return true;
+} 
 
 template<class T>
 bool MySet<T>::IsSubsetOf(const SetInterface<T>& superset) {} 
@@ -58,18 +108,76 @@ bool MySet<T>::IsSupersetOf(const SetInterface<T>& subset) {}
 
 template<class T>
 void MySet<T>::Intersection(const SetInterface<T>& set2) {} 
-
+// Sort the set in ascending order using insertion sort
 template<class T>
-void MySet<T>::SortAscending() {}
-
+void MySet<T>::SortAscending() {
+  for (int i = 0; i < num_elements_; ++i) {
+    T key = array_[i];
+    int j = i - 1;
+    while (j >= 0 && array_[j] > key) {
+      array_[j + 1] = array_[j];
+      --j;
+    }
+    array_[j + 1] = key;
+  }
+}
+// Sort the set in descending order using insertion sort
 template<class T>
-void MySet<T>::SortDesnending() {}
+void MySet<T>::SortDescending() {
+  for (int i = 1; i < num_elements_; ++i) {
+    T key = array_[i];
+    int j = i - 1;
+    while (j >= 0 && array_[j] < key) {
+      array_[j + 1] = array_[j];
+      --j;
+    }
+    array_[j + 1] = key;
+  }
+}
 
 template<class T>
 void MySet<T>::RemoveDuplicates() {}
 
 template<class T>
-MySet<T>& MySet<T>::Concat(const SetInterface<T>& set2, bool includeDuplicates) {}  // Return *this at end
+MySet<T>& MySet<T>::Concat(const SetInterface<T>& set2, bool includeDuplicates) {
+  int new_size = num_elements_;
+  // Get number of new elements as new_size
+  for (int i = 0; i < set2.Cardinality(); ++i) {
+    T temp;
+    static_cast<const MySet<T>&>(set2).GetElement(i, temp);
+    if (includeDuplicates || !IsElementOf(temp)) {
+      ++new_size;
+    }
+  }
+  T* new_array = new T[new_size];
+  int index = 0;
+  // Copy current elements
+  for (int i = 0;i < num_elements_; ++i) {
+    new_array[index] = array_[i];
+    index++;
+  }
+  // Copy new elements
+  for (int i = 0; i < set2.Cardinality(); ++i) {
+    T temp;
+    static_cast<const MySet<T>&>(set2).GetElement(i, temp);
+    if(includeDuplicates || !IsElementOf(temp)) {
+      new_array[index] = temp;
+      index++;
+    }
+  }
+  // Free memory
+  delete[] array_;
+  array_ = new_array;
+  num_elements_ = index;
+  return *this;
+}
+
+template<class T>
+void MySet<T>::GetElement(int index, T& output) const {
+  if (index >= 0 && index < num_elements_) {
+    output = array_[index];
+  }
+}
 
 template<class T>
 MySet<T>& MySet<T>::operator = (const MySet& tocopy) {}
