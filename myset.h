@@ -34,15 +34,16 @@ class MySet : public SetInterface<T> {
   void SortDescending();
   void RemoveDuplicates();
   MySet<T>& Concat(const SetInterface<T>& set2, bool includeDuplicates = true);  // Return *this at end
-  void GetElement(int index, T& output) const;
+  T GetElement(int index) const;
   MySet<T>& operator = (const MySet<T>& tocopy);
   // MySet<T>& operator + (const MySet<T>& toadd);
   MySet<T>& operator += (const MySet<T>& toadd) { return Concat(toadd); }
   MySet<T>& operator - (const MySet<T>& tosub); // Only works if set2 isSubSetOf set1 
-  MySet<T>& operator -= (const MySet<T>& tosub) { *this = *this - *tosub; }
+  MySet<T>& operator -= (const MySet<T>& tosub) { return *this = *this - *tosub; }
   bool operator == (const MySet<T>& other);
   bool operator != (const MySet<T>& other) { return !( *this == other ); }
-  friend ostream& operator << (ostream& where_to, const MySet<T>& mySet);
+  template <typename U>
+  friend ostream& operator << (ostream& where_to, const MySet<U>& mySet);
 }; // end class MySet
 
 }  // end namespace csce240h_exam3

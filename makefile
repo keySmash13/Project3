@@ -6,12 +6,20 @@ link = $(compiler) $(flags)
 myset.o : myset.cc myset.h setinterface.h
 	$(compile) $<
 
-test.o : initialtest.cc myset.h setinterface.h
+initialtest.o : initialtest.cc myset.h setinterface.h
 	$(compile) $<
 
-test : test.o myset.o
+initialtest : test.o myset.o
 	$(link) $^
 	./a.out
+
+tests.o: tests.cc myset.h setinterface.h
+	$(compile) $<
+
+tests : tests.o myset.o
+	$(link) $^
+	./a.out
+
 
 clean :
 	rm *.o a.out
