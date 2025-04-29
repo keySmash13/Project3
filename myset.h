@@ -1,4 +1,4 @@
-// Copyright 2025 Adrian Holdcraft
+// Copyright 2025 Jake Sherer and Abby Holdcraft
 #ifndef MYSET_H_
 #define MYSET_H_
 

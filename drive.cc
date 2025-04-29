@@ -1,4 +1,4 @@
-// Adrian
+// Copyright 2025 Jake Sherer and Abby Holdcraft
 #include"myset.h"
 #include"myset.cc"
 #include<iostream>

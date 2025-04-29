@@ -1,4 +1,4 @@
-// Holdcraft
+// Copyright 2025 Jake Sherer and Abby Holdcraft
 #ifndef _SETINTERFACE_H_
 #define _SETINTERFACE_H_
 
