@@ -6,6 +6,8 @@
 using std::ostream;
 #include"setinterface.h"
 
+namespace csce240h_exam3 {
+
 template<class T>
 class MySet : public SetInterface<T> {
  public:
@@ -42,5 +44,7 @@ class MySet : public SetInterface<T> {
  int num_elements_;
 
 };
+
+}  // end namespace csce240h_exam3
 
 #endif  // MYSET_H_

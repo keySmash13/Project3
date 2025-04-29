@@ -2,6 +2,8 @@
 #ifndef _SETINTERFACE_H_
 #define _SETINTERFACE_H_
 
+namespace csce240h_exam3 {
+
 template<class T>
 class SetInterface {
  public:
@@ -14,5 +16,7 @@ class SetInterface {
   virtual bool IsSupersetOf(const SetInterface<T>& subset) = 0;
   virtual void Intersection(const SetInterface<T>& set2) = 0;
 };
+
+}  // end namespace csce240h_exam3
 
 #endif  // _SETINTERFACE_H_

@@ -4,6 +4,8 @@
 #include<iostream>
 #include<string>
 using std::string;
+using csce240h_exam3::SetInterface;
+using csce240h_exam3::MySet;
 
 int main() {
   cout << "    Constructor tests:" << endl

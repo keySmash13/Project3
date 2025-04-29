@@ -7,6 +7,8 @@ using std::string;
 using std::cout;
 using std::endl;
 
+namespace csce240h_exam3 {
+
 // Constructor
 template<class T>
 MySet<T>::MySet(T* array, int num_elements) {
@@ -289,3 +291,6 @@ bool MySet<T>::operator == (const MySet<T>& other) {
   }
   return false;
 }
+
+}  // end namespace csce240h_exam3
+
