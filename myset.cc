@@ -1,39 +1,39 @@
-// Copyright 2025 Jake Sherer and Abby Holdcraft
-#include"setinterface.h"
-#include<iostream>
+// Adrian
+#include "myset.h"
+#include <iostream>
 using std::ostream;
 #include<string>
 using std::string;
 using std::cout;
 using std::endl;
-#include"myset.h"
 
-namespace csce240h_exam3 {
-
+// Constructor
 template<class T>
-MySet<T>::MySet(T * array, int num_elements) {
+MySet<T>::MySet(T* array, int num_elements) {
   SetElements(array, num_elements);
 }
 
+// Copy Constructor
 template<class T>
 MySet<T>::MySet(const MySet<T>& tocopy) {
   SetElements(tocopy.array_, tocopy.num_elements_);
 }
 
+// Destructor
 template<class T>
 MySet<T>::~MySet() {
   delete [] array_;
 }
 
+// Sets array and number of elements to parameters
 template<class T>
-void MySet<T>::SetElements(T * array, int num_elements) const {
+void MySet<T>::SetElements(T * array, int num_elements) {
   if (num_elements < 0)
     return;
   num_elements_ = num_elements;
   if (array_ != nullptr)
     delete [] array_;
   if (num_elements_ == 0) {
-    array_ = nullptr;
     return;
   }
   array_ = new T[num_elements_];
@@ -41,14 +41,16 @@ void MySet<T>::SetElements(T * array, int num_elements) const {
     array_[i] = array[i];
 }
 
-// Print the set in {1 2 ...} format
+// Prints object
 template<class T>
 void MySet<T>::Print() const {
-  cout << "{";
-  for (int i=0; i < num_elements_; ++i) {
-    cout << array_[i] << " ";
+  cout << '{';
+  if (num_elements_ != 0)
+    cout << array_[0];
+  for (int i = 1; i < num_elements_; i++) {
+    cout << ' ' << array_[i];
   }
-  cout << "}" << endl;
+  cout << '}' << endl;
 }
 
 // Return true if value is in set
@@ -61,17 +63,36 @@ bool MySet<T>::IsElementOf(T value) const {
   return false;
 }
 
-// TODO
+// Gets element at parameterized index
 template<class T>
-int MySet<T>::Cardinality() const {return 0;}
+T MySet<T>::GetElement(int index) const {
+  if (index >= 0 && index < num_elements_) {
+    return array_[index];
+  }
+  return T{};
+}
+
+// Return the number of unique elements in a set
+template<class T>
+int MySet<T>::Cardinality() const {
+  T seen[num_elements_];
+  int num_seen = 1;
+  seen[0] = array_[0];
+  for (int i = 1; i < num_elements_; ++i) {
+    seen[num_seen++] = array_[i];
+    for (int j = 0; j < num_seen-1; ++j) {
+      if (seen[j] == array_[i]) {
+        --num_seen;
+        j = num_seen;
+      }
+    }
+  }
+  return num_seen;
+}
 
 // Add value to the set if it is not present already
 template<class T>
 bool MySet<T>::AddElement(const T& toadd) {
-  // Check if it exists
-  if (IsElementOf(toadd))
-    return false;
-
   // Create new array and add element to end
   T* temp = new T[num_elements_ + 1];
   for (int i = 0; i <num_elements_; ++i)
@@ -107,13 +128,16 @@ bool MySet<T>::RemoveElement(const T& toremove) {
   return true;
 }
 
-// TODO: can you get instances of superset?
+// Checks if object is a subset of parameterized set
 template<class T>
 bool MySet<T>::IsSubsetOf(const SetInterface<T>& superset) {
   for (int i = 0; i < num_elements_; i++) {
     bool found = false;
-    for (int j = 0; j < superset.num_elements_; j++) {
-      if ( array_[i] == static_cast<const MySet<T>&>(superset).GetElement(i) ) {
+    for (int j = 0;
+         j < static_cast<const MySet<T>&>(superset).GetNumElements();
+         j++) {
+      if ( array_[i] ==
+           static_cast<const MySet<T>&>(superset).GetElement(j) ) {
         found = true;
         break;
       }
@@ -124,19 +148,38 @@ bool MySet<T>::IsSubsetOf(const SetInterface<T>& superset) {
   return true;
 }
 
+// Checks if object is a superset of parameterized set
 template<class T>
 bool MySet<T>::IsSupersetOf(const SetInterface<T>& subset) {
-  return subset.IsElementOf(*this);
-} 
+  for (int i = 0;
+    i < static_cast<const MySet<T>&>(subset).GetNumElements();
+    i++) {
+    bool found = false;
+    for (int j = 0; j < num_elements_; j++) {
+      if ( array_[j] ==
+           static_cast<const MySet<T>&>(subset).GetElement(i) ) {
+        found = true;
+        break;
+      }
+    }
+    if (!found)
+      return false;
+  }
+  return true;
+}
 
-// TODO: can you get instances of superset?
+// Makes set into the intersection of the object and parameter's sets
 template<class T>
 void MySet<T>::Intersection(const SetInterface<T>& set2) {
-  MySet<T> newSet = new MySet();
+  MySet<T> newSet;
   for (int i = 0; i < num_elements_; i++) {
-    for (int j = 0; j < set2.num_elements_; j++) {
-      if (array_[i] == set2.array_[j]) {
-        newSet.AddElement(set2.array_[j]);
+    for (int j = 0;
+         j < static_cast<const MySet<T>&>(set2).GetNumElements();
+         j++) {
+      if (array_[i] ==
+          static_cast<const MySet<T>&>(set2).GetElement(j)) {
+        newSet.AddElement
+          (static_cast<const MySet<T>&>(set2).GetElement(j));
       }
     }
   }
@@ -213,13 +256,6 @@ MySet<T>& MySet<T>::Concat(const SetInterface<T>& set2, bool includeDuplicates) 
 }
 
 template<class T>
-T MySet<T>::GetElement(int index) const {
-  if (index >= 0 && index < num_elements_) {
-    return array_[index];
-  }
-}
-
-template<class T>
 MySet<T>& MySet<T>::operator = (const MySet& tocopy) {
   SetElements(tocopy.array_, tocopy.num_elements_);
 }
@@ -253,11 +289,3 @@ bool MySet<T>::operator == (const MySet<T>& other) {
   }
   return false;
 }
-
-template<class U>
-ostream& operator << (ostream& where_to, const MySet<U>& mySet) {
-  mySet->Print();
-  return where_to;
-}
-
-}  // end namespace csce240h_exam3
