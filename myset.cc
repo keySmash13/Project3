@@ -1,7 +1,6 @@
 // Copyright 2025 Jake Sherer and Abby Holdcraft
 #include "myset.h"
 #include <iostream>
-using std::ostream;
 #include<string>
 using std::string;
 using std::cout;
@@ -36,6 +35,7 @@ void MySet<T>::SetElements(T * array, int num_elements) {
   if (array_ != nullptr)
     delete [] array_;
   if (num_elements_ == 0) {
+    array_ = new T[1];
     return;
   }
   array_ = new T[num_elements_];
@@ -118,9 +118,12 @@ bool MySet<T>::RemoveElement(const T& toremove) {
   // Create new array and copy over elements while skipping toremove
   T* temp = new T[num_elements_ - 1];
   int index = 0;
+  bool found = false;
   for (int i = 0; i < num_elements_; ++i) {
-    if (array_[i] != toremove)
+    if (found == true || array_[i] != toremove)
       temp[index++] = array_[i];
+    else
+      found = true;
   }
 
   // Free memory
@@ -173,19 +176,21 @@ bool MySet<T>::IsSupersetOf(const SetInterface<T>& subset) {
 // Makes set into the intersection of the object and parameter's sets
 template<class T>
 void MySet<T>::Intersection(const SetInterface<T>& set2) {
-  MySet<T> newSet;
+  const MySet<T>* set_2 = dynamic_cast<const MySet<T>*>(&set2);
+  int intersection_count = 0;
   for (int i = 0; i < num_elements_; i++) {
-    for (int j = 0;
-         j < static_cast<const MySet<T>&>(set2).GetNumElements();
-         j++) {
-      if (array_[i] ==
-          static_cast<const MySet<T>&>(set2).GetElement(j)) {
-        newSet.AddElement
-          (static_cast<const MySet<T>&>(set2).GetElement(j));
-      }
+    if (set_2->IsElementOf(array_[i])) {
+      intersection_count++;
     }
   }
-  SetElements(newSet.array_, newSet.num_elements_);
+  T newArray[intersection_count];
+  int index = 0;
+  for (int i = 0; i < num_elements_; i++) {
+    if (set_2->IsElementOf(array_[i])) {
+      newArray[index++] = array_[i];
+    }
+  }
+  SetElements(newArray,intersection_count);
 }
 
 // Sort the set in ascending order using insertion sort
@@ -217,12 +222,21 @@ void MySet<T>::SortDescending() {
 
 template<class T>
 void MySet<T>::RemoveDuplicates() {
-  MySet<T> newSet = new MySet();
-  for (int i = 0; i < num_elements_; i++) {
-    if (!newSet.IsElementOf(array_[i]))
-      newSet.AddElement(array_[i]);
+  int cardinality = Cardinality();
+  T seen[cardinality];
+  int num_seen = 1;
+  seen[0] = array_[0];
+  for (int i = 1;
+    i < num_elements_ && num_seen < cardinality;
+    ++i) {
+    seen[num_seen++] = array_[i];
+    for (int j = 0; j < num_seen-1; ++j) {
+      if (seen[j] == array_[i]) {
+        j = num_seen--;
+      }
+    }
   }
-  SetElements(newSet.array_, newSet.num_elements_);
+  SetElements(seen, num_seen);
 }
 
 template<class T>
@@ -260,24 +274,35 @@ MySet<T>& MySet<T>::Concat(const SetInterface<T>& set2, bool includeDuplicates) 
 template<class T>
 MySet<T>& MySet<T>::operator = (const MySet& tocopy) {
   SetElements(tocopy.array_, tocopy.num_elements_);
+  return *this;
 }
 
 // template<class T>
 // MySet<T>& operator + (const MySet<T>& toadd) {}
 
 template<class T>
-MySet<T>& MySet<T>::operator - (const MySet<T>& tosub) {
+MySet<T> MySet<T>::operator - (const MySet<T>& tosub) {
+  MySet<T> ret(array_, num_elements_);
   if ( IsSupersetOf(tosub) ) {
-    MySet<T> newSet = new MySet(nullptr, num_elements_ - tosub.num_elements_);
-    int index = 0;
-    for (int i = 0; i < num_elements_; i++) {
-      if (!tosub.IsElementOf(array_[i])) {
-        newSet.array_[index++] = array_[i];
-      }
+    for (int i = 0; i < tosub.num_elements_; i++) {
+      ret.RemoveElement(tosub.array_[i]);
     }
   } else {
     cout << "Cannot subtract! Second set is not a subset of first set." << endl;
   }
+  return ret;
+}
+
+template<class T>
+MySet<T>& MySet<T>::operator -= (const MySet<T>& tosub) {
+    if ( IsSupersetOf(tosub) ) {
+    for (int i = 0; i < tosub.num_elements_; i++) {
+      RemoveElement(tosub.array_[i]);
+    }
+  } else {
+    cout << "Cannot subtract! Second set is not a subset of first set." << endl;
+  }
+  return *this;
 }
 
 template<class T>

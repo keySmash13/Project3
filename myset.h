@@ -24,8 +24,8 @@ class MySet : public SetInterface<T> {
   MySet<T>& operator = (const MySet<T>& tocopy);
   // MySet<T>& operator + (const MySet<T>& toadd);
   MySet<T>& operator += (const MySet<T>& toadd) { return Concat(toadd); }
-  MySet<T>& operator - (const MySet<T>& tosub); // Only works if set2 isSubSetOf set1
-  MySet<T>& operator -= (const MySet<T>& tosub) { return *this = *this - tosub; }
+  MySet<T> operator - (const MySet<T>& tosub); // Only works if set2 isSubSetOf set1
+  MySet<T>& operator -= (const MySet<T>& tosub);
   bool operator == (const MySet<T>& other);
   bool operator != (const MySet<T>& other) { return !( *this == other ); }
 
