@@ -20,11 +20,10 @@ class MySet : public SetInterface<T> {
   void SortAscending();
   void SortDescending();
   void RemoveDuplicates();
-  MySet<T>& Concat(const SetInterface<T>& set2, bool includeDuplicates = true);  // Return *this at end
+  MySet<T>& Concat(const SetInterface<T>& set2, bool includeDuplicates = true);
   MySet<T>& operator = (const MySet<T>& tocopy);
-  // MySet<T>& operator + (const MySet<T>& toadd);
   MySet<T>& operator += (const MySet<T>& toadd) { return Concat(toadd); }
-  MySet<T> operator - (const MySet<T>& tosub); // Only works if set2 isSubSetOf set1
+  MySet<T> operator - (const MySet<T>& tosub);
   MySet<T>& operator -= (const MySet<T>& tosub);
   bool operator == (const MySet<T>& other);
   bool operator != (const MySet<T>& other) { return !( *this == other ); }

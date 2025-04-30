@@ -220,6 +220,7 @@ void MySet<T>::SortDescending() {
   }
 }
 
+// Removes all duplicate values in the array
 template<class T>
 void MySet<T>::RemoveDuplicates() {
   int cardinality = Cardinality();
@@ -239,6 +240,8 @@ void MySet<T>::RemoveDuplicates() {
   SetElements(seen, num_seen);
 }
 
+// Concatenates the parameterized set to the object
+// if includeDuplicates = false, method will ignore any duplicate values in set2.
 template<class T>
 MySet<T>& MySet<T>::Concat(const SetInterface<T>& set2, bool includeDuplicates) {
   int new_size = num_elements_;
@@ -271,15 +274,15 @@ MySet<T>& MySet<T>::Concat(const SetInterface<T>& set2, bool includeDuplicates) 
   return *this;
 }
 
+// Overloaded =
 template<class T>
 MySet<T>& MySet<T>::operator = (const MySet& tocopy) {
   SetElements(tocopy.array_, tocopy.num_elements_);
   return *this;
 }
 
-// template<class T>
-// MySet<T>& operator + (const MySet<T>& toadd) {}
-
+// Overloaded -
+// Only functional if tosub is a subset of object
 template<class T>
 MySet<T> MySet<T>::operator - (const MySet<T>& tosub) {
   MySet<T> ret(array_, num_elements_);
@@ -293,6 +296,7 @@ MySet<T> MySet<T>::operator - (const MySet<T>& tosub) {
   return ret;
 }
 
+// Overloaded -=
 template<class T>
 MySet<T>& MySet<T>::operator -= (const MySet<T>& tosub) {
     if ( IsSupersetOf(tosub) ) {
@@ -305,6 +309,7 @@ MySet<T>& MySet<T>::operator -= (const MySet<T>& tosub) {
   return *this;
 }
 
+// Overloaded ==
 template<class T>
 bool MySet<T>::operator == (const MySet<T>& other) {
   if (num_elements_ == other.num_elements_) {
