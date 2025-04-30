@@ -39,9 +39,8 @@ class MySet : public SetInterface<T> {
   void Intersection(const SetInterface<T>& set2) override;
 
  private:
- T * array_;
- int num_elements_;
-
+  T * array_;
+  int num_elements_;
 };
 
 }  // end namespace csce240h_exam3

@@ -1,9 +1,10 @@
 // Copyright 2025 Jake Sherer and Abby Holdcraft
-#include"myset.h"
-#include"myset.cc"
+
 #include<iostream>
 #include<string>
 using std::string;
+#include"myset.h"
+#include"myset.cc"
 using csce240h_exam3::SetInterface;
 using csce240h_exam3::MySet;
 
@@ -14,12 +15,12 @@ int main() {
   default_int->Print();
 
   cout << "Parameterized integer set:" << endl;
-  int int_array[4] = {1,2,3,4};
+  int int_array[4] = {1, 2, 3, 4};
   MySet<int>* int_set = new MySet<int>(int_array, 4);
   int_set->Print();
   cout << "Parameterized character set:" << endl;
   char char_array[10] =
-    {'a','b','c','d','e','f','g','h','i','j'};
+    {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'};
   MySet<char>* char_set = new MySet<char>(char_array, 10);
   char_set->Print();
   cout << "Parameterized string set:" << endl;
@@ -45,13 +46,13 @@ int main() {
   cout << "Character set Cardinality, expected 10: "
     << char_set->Cardinality() << endl;
   cout << "Creating int set with duplicates:" << endl;
-  int duplicate_int_array[7] = {1,2,3,4,1,2,3};
+  int duplicate_int_array[7] = {1, 2, 3, 4, 1, 2, 3};
   MySet<int>* duplicate_int_set = new MySet<int>(duplicate_int_array, 7);
   duplicate_int_set->Print();
   cout << "Creating char set with duplicates:" << endl;
   char duplicate_char_array[17] =
-    {'a','a','a','a','a','a','j',
-      'a','b','c','d','e','f','g','h','i','j'};
+    {'a', 'a', 'a', 'a', 'a', 'a', 'j',
+      'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'};
   MySet<char>* duplicate_char_set = new MySet<char>(duplicate_char_array, 17);
   duplicate_char_set->Print();
   cout << "Duplicate Integer set Cardinality, expected 4: "
@@ -118,14 +119,16 @@ int main() {
 
   // bool = true, bool = false
   cout << endl << "    Concat tests:" << endl;
-  cout << "Concatting character sets, including duplicate values:" << endl << "Set 1:";
+  cout << "Concatting character sets, including duplicate values:" << endl
+  << "Set 1:";
   duplicate_char_set->Print();
   cout << "Set 2: ";
   char_set->Print();
   duplicate_char_set->Concat(*char_set);
   cout << "Concatenated: ";
   duplicate_char_set->Print();
-  cout << "Concatting string sets, ignoring duplicate values:" << endl << "Set 1:";
+  cout << "Concatting string sets, ignoring duplicate values:" << endl
+  << "Set 1:";
   string_set->AddElement("Nice!");
   string_set->Print();
   cout << "Set 2: ";
@@ -174,7 +177,33 @@ int main() {
   string_set_1->Intersection(*string_set_2);
   string_set_1->Print();
 
-  // TODO
-  cout << endl << "    Sort tests:" << endl;  // Ascending and Descending
+  cout << endl << "    Sorting tests:" << endl;
+  // Integer sorting test
+  int unsorted_ints[6] = {9, 1, 7, 3, 5, 2};
+  MySet<int>* sortable_int_set = new MySet<int>(unsorted_ints, 6);
+  cout << "Original int set:" << endl;
+  sortable_int_set->Print();
+
+  cout << "After SortAscending() — Expected: 1, 2, 3, 5, 7, 9" << endl;
+  sortable_int_set->SortAscending();
+  sortable_int_set->Print();
+
+  cout << "After SortDescending() — Expected: 9, 7, 5, 3, 2, 1" << endl;
+  sortable_int_set->SortDescending();
+  sortable_int_set->Print();
+
+  // Character sorting test
+  char unsorted_chars[7] = {'z', 'a', 't', 'b', 'm', 'y', 'e'};
+  MySet<char>* sortable_char_set = new MySet<char>(unsorted_chars, 7);
+  cout << "Original char set:" << endl;
+  sortable_char_set->Print();
+
+  cout << "After SortAscending() — Expected: a, b, e, m, t, y, z" << endl;
+  sortable_char_set->SortAscending();
+  sortable_char_set->Print();
+
+  cout << "After SortDescending() — Expected: z, y, t, m, e, b, a" << endl;
+  sortable_char_set->SortDescending();
+  sortable_char_set->Print();
   return 0;
 }

@@ -1,6 +1,6 @@
 // Copyright 2025 Jake Sherer and Abby Holdcraft
-#ifndef _SETINTERFACE_H_
-#define _SETINTERFACE_H_
+#ifndef SETINTERFACE_H_
+#define SETINTERFACE_H_
 
 namespace csce240h_exam3 {
 
@@ -19,4 +19,4 @@ class SetInterface {
 
 }  // end namespace csce240h_exam3
 
-#endif  // _SETINTERFACE_H_
+#endif  // SETINTERFACE_H_

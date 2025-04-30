@@ -190,7 +190,7 @@ void MySet<T>::Intersection(const SetInterface<T>& set2) {
       newArray[index++] = array_[i];
     }
   }
-  SetElements(newArray,intersection_count);
+  SetElements(newArray, intersection_count);
 }
 
 // Sort the set in ascending order using insertion sort
@@ -241,9 +241,10 @@ void MySet<T>::RemoveDuplicates() {
 }
 
 // Concatenates the parameterized set to the object
-// if includeDuplicates = false, method will ignore any duplicate values in set2.
+// if includeDuplicates = false, method will ignore any duplicates in set2.
 template<class T>
-MySet<T>& MySet<T>::Concat(const SetInterface<T>& set2, bool includeDuplicates) {
+MySet<T>& MySet<T>::Concat(const SetInterface<T>& set2,
+bool includeDuplicates) {
   int new_size = num_elements_;
   // Get number of new elements as new_size
   for (int i = 0; i < set2.Cardinality(); ++i) {
@@ -255,14 +256,14 @@ MySet<T>& MySet<T>::Concat(const SetInterface<T>& set2, bool includeDuplicates) 
   T* new_array = new T[new_size];
   int index = 0;
   // Copy current elements
-  for (int i = 0;i < num_elements_; ++i) {
+  for (int i = 0; i < num_elements_; ++i) {
     new_array[index] = array_[i];
     index++;
   }
   // Copy new elements
   for (int i = 0; i < set2.Cardinality(); ++i) {
     T temp = static_cast<const MySet<T>&>(set2).GetElement(i);
-    if(includeDuplicates || !IsElementOf(temp)) {
+    if (includeDuplicates || !IsElementOf(temp)) {
       new_array[index] = temp;
       index++;
     }
