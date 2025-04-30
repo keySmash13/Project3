@@ -17,12 +17,14 @@ int main() {
   int int_array[4] = {1, 2, 3, 4};
   MySet<int>* int_set = new MySet<int>(int_array, 4);
   int_set->Print();
-  cout << "Parameterized character set - Expected {a b c d e f g h i j}" << endl;
+  cout << "Parameterized character set - Expected {a b c d e f g h i j}"
+  << endl;
   char char_array[10] =
     {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'};
   MySet<char>* char_set = new MySet<char>(char_array, 10);
   char_set->Print();
-  cout << "Parameterized string set - Expected {This Is A String Set}" << endl;
+  cout << "Parameterized string set - Expected {This Is A String Set}"
+  << endl;
   string string_array[5] = {"This", "Is", "A", "String", "Set"};
   MySet<string>* string_set = new MySet<string>(string_array, 5);
   string_set->Print();
@@ -48,19 +50,21 @@ int main() {
   int duplicate_int_array[7] = {1, 2, 3, 4, 1, 2, 3};
   MySet<int>* duplicate_int_set = new MySet<int>(duplicate_int_array, 7);
   duplicate_int_set->Print();
-  cout << "Creating char set with duplicates - Expected {a a a a a a j a b c d e f g h i j}" << endl;
+  cout << "Creating char set with duplicates - "
+  << "Expected {a a a a a a j a b c d e f g h i j}" << endl;
   char duplicate_char_array[17] =
     {'a', 'a', 'a', 'a', 'a', 'a', 'j',
       'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'};
   MySet<char>* duplicate_char_set = new MySet<char>(duplicate_char_array, 17);
   duplicate_char_set->Print();
   cout << "Duplicate Integer set Cardinality - Expected 4: "
-    << duplicate_int_set->Cardinality() << endl;
+  << duplicate_int_set->Cardinality() << endl;
   cout << "Duplicate Character set Cardinality - Expected 10: "
-    << duplicate_char_set->Cardinality() << endl;
+  << duplicate_char_set->Cardinality() << endl;
 
   cout << endl << "    AddElement tests:" << endl;
-  cout << "Adding elements to string set - Expected {This Is A String Set And Now It's Longer}" << endl;
+  cout << "Adding elements to string set - "
+  << "Expected {This Is A String Set And Now It's Longer}" << endl;
   string_set->AddElement("And");
   string_set->AddElement("Now");
   string_set->AddElement("It's");
@@ -73,7 +77,8 @@ int main() {
   copy_string_set->Print();
 
   cout << endl << "    RemoveElement tests:" << endl;
-  cout << "Removing elements from string set - Expected {This Is A String Set}" << endl;
+  cout << "Removing elements from string set - Expected {This Is A String Set}"
+  << endl;
   string_set->RemoveElement("And");
   string_set->RemoveElement("Now");
   string_set->RemoveElement("It's");
